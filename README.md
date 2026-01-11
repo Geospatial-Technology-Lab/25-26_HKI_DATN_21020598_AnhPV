@@ -1,47 +1,241 @@
 # iHydroSlide3D v1.1
-#### ✅ What is iHydroSlide3D v1.1?
 
-iHydroSlide3D is an open-source, **p**arallelized, and modular modeling software for regional **hy**drologic processes and **l**andslides simulation and prediction. The PHyL mainly includes the following modules: (i) a distributed hydrological model (CREST); (ii) a regional 3D slope stability model; and (iii) a soil moisture downscaling (SMD) method. Parallel computational technique is applied for both hydrological and slope-stability modeling modules, which is further seamlessly coupled by the SMD method. An advanced storage method, visualization, and validation processes are designed to improve the post-processing of the simulation results. PHyL is therefore an advanced and user-friendly tool for regional flood-landslide disaster forecasting.
+## Giới thiệu
 
-Note:  *iHydroSlide3D v1.1* is functionally identical to *PHyL v1.0* (Chen et al., 2024), which was developed as an enhanced version of *iHydroSlide3D v1.0*, primarily improving high-performance computing (HPC) capabilities. Although *PHyL v1.0* was publicly released, we have decided to discontinue that name. All future updates and releases will continue under the name *iHydroSlide3D*, which is already well established and widely recognized in the open-source community. 
+iHydroSlide3D v1.1 là phần mềm mã nguồn mở, song song hóa và mô-đun hóa để mô phỏng và dự báo các quá trình thủy văn khu vực và sạt lở đất. Phần mềm bao gồm các mô-đun chính:
 
-#### ✅ Install the iHydroSlide3D
+- **(i)** Mô hình thủy văn phân tán (CREST)
+- **(ii)** Mô hình ổn định mái dốc 3D khu vực
+- **(iii)** Phương pháp hạ thấp độ phân giải độ ẩm đất (SMD)
 
-##### ➡️ Install using Git
+## Đặc điểm chính
 
-If you are a git user, you can install the PHyL and keep up to date by cloning the repo:
+- Ứng dụng đa nền tảng
+- Tính toán song song trong cả mô-đun thủy văn và mô-đun ổn định mái dốc
+- Nén HDF5 để tiết kiệm thời gian I/O và lưu trữ
+- Trực quan hóa hậu xử lý cho hình ảnh và video
+
+## Yêu cầu phần mềm/môi trường
+
+- CMake ≥ 3.23
+- Trình biên dịch Fortran: GNU ≥ 11.2 hoặc Intel oneAPI (khuyến nghị GNU)
+- OpenMP ≥ 4.5
+- HDF5 ≥ 1.10.*
+- Python ≥ 3.8
+
+## Yêu cầu phần cứng
+
+- RAM ≥ 3 GB
+- Số lõi CPU ≥ 2
+
+iHydroSlide3D có thể chạy trên hầu hết các thiết bị máy tính hiện tại, từ máy tính cá nhân đến máy tính hiệu năng cao (HPC).
+
+---
+
+## Hướng dẫn cài đặt
+
+### Bước 1: Tải mã nguồn
+
+Mở terminal và chạy lệnh sau:
+
+```bash
+git clone https://github.com/Geospatial-Technology-Lab/25-26_HKI_DATN_21020598_AnhPV.git
+```
+
+### Bước 2: Thay đổi các đường dẫn
+
+Chỉnh sửa file `CMakeLists.txt`
+
+
+### Bước 3: Biên dịch phần mềm
+
+Vào thư mục "Build":
+
+```bash
+cd Build
+```
+
+Cấu hình CMake:
+
+```bash
+cmake ..
+```
+
+Biên dịch:
+
+```bash
+make
+```
+
+Nếu thành công, bạn sẽ nhận được file thực thi: `iHydroSlide3D`
+
+---
+
+## Cấu trúc thư mục
 
 ```
-git clone https://github.com/GuodingChen/PHyL_v1.0.git
+📦iHydroSlide3D_v1.0
+ ┣ 📂Build                    (Thư mục lưu trữ file cấu hình CMake)
+ ┣ 📂DownscalingBasicData     (Dữ liệu đầu vào cho mô-đun hạ thấp độ ẩm đất)
+ ┃ ┣ 📜TWI_coarse.asc         (Chỉ số ẩm địa hình độ phân giải thô)
+ ┃ ┣ 📜TWI_fine.asc           (Chỉ số ẩm địa hình độ phân giải mịn)
+ ┃ ┣ 📜aspect_coarse.asc      (Góc hướng địa lý độ phân giải thô)
+ ┃ ┣ 📜curvature_coarse.asc   (Độ cong độ phân giải thô)
+ ┃ ┗ 📜curvature_fine.asc     (Độ cong độ phân giải mịn)
+ ┣ 📂HydroBasics              (Dữ liệu đầu vào cho mô-đun thủy văn)
+ ┃ ┣ 📜DEM.asc                (Mô hình số độ cao)
+ ┃ ┣ 📜FAC.asc                (Tích lũy dòng chảy)
+ ┃ ┣ 📜FDR.asc                (Hướng dòng chảy)
+ ┃ ┣ 📜Mask.asc               (Các pixel tính toán trong lưu vực)
+ ┃ ┗ 📜Stream.asc             (Các pixel kênh sông)
+ ┣ 📂ICS                      (Thiết lập điều kiện ban đầu)
+ ┃ ┗ 📋InitialConditions.txt
+ ┣ 📂LandslideBasics          (Dữ liệu đầu vào cho mô-đun sạt lở)
+ ┃ ┣ 📜DEM_fine.asc           (DEM độ phân giải mịn)
+ ┃ ┣ 📜Soil.asc               (Bản đồ cấu trúc đất)
+ ┃ ┣ 📜aspect_fine.asc        (Góc hướng độ phân giải mịn)
+ ┃ ┣ 📜mask_fine.asc          (Bản đồ mask độ phân giải mịn)
+ ┃ ┗ 📜slope_fine.asc         (Góc dốc độ phân giải mịn)
+ ┣ 📂OBS                      (Quan trắc thực địa để hiệu chỉnh)
+ ┣ 📂PETs                     (Dữ liệu bốc hơi theo giờ)
+ ┣ 📂Params                   (Các tham số mô hình)
+ ┃ ┣ 📜IM.asc                 (Tỷ lệ diện tích không thấm)
+ ┃ ┣ 📜Ksat.asc               (Hệ số thấm bão hòa của đất)
+ ┃ ┣ 📋Parameters_hydro.txt   (Tham số mô-đun thủy văn)
+ ┃ ┣ 📋Parameters_land.txt    (Tham số mô-đun sạt lở)
+ ┃ ┣ 📋Parameters_parallel.txt (Thiết lập tính toán song song)
+ ┃ ┗ 📜WM.asc                 (Dung lượng chứa nước của đất)
+ ┣ 📂Rains                    (Dữ liệu mưa theo giờ)
+ ┣ 📂Results                  (Lưu trữ kết quả mô phỏng)
+ ┣ 📂States                   (Biến trung gian cho khởi động ấm)
+ ┣ 📂Visualization            (Dữ liệu và mã trực quan hóa)
+ ┣ 📂include                  (File biên dịch .mod)
+ ┣ 📂logs                     (Nhật ký mô phỏng)
+ ┣ 📂src                      (Mã nguồn Fortran nếu cần chỉnh source code thì chỉnh trong này xong build lại)
+ ┣ 📋CMakeLists.txt           (File CMake)
+ ┗ 📋Control.Project          (Thông tin cơ bản cho mô phỏng)
 ```
 
-##### ➡️ Install manually
+---
 
-Download using the [GitHub .zip download](https://github.com/GuodingChen/PHyL_v1.0/archive/refs/tags/v1.0.zip) option and unzip them.
+## Chạy mô hình
 
-#### ✅ Use the iHydroSlide3D
+### Thiết lập cơ bản trong Control.Project tùy chỉnh theo vùng nghiên cứu
 
-Users can refer to  [Manual.html](Manual.html) to get started.
+#### 1. Thông tin cơ bản mô-đun thủy văn và ổn định mái dốc
 
-#### ✅ Contacts
+```python
+# Bản đồ thủy văn
+NCols_Hydro     = 598    # Số cột
+NRows_Hydro     = 650    # Số hàng
+XLLCorner_Hydro = 108.335815
+YLLCorner_Hydro = 32.654663
+CellSize_Hydro  = 0.000833	
 
-➡️ Guoding Chen ([guoding.chen94@gmail.com](mailto:guoding.chen94@gmail.com))
+# Bản đồ sạt lở
+NCols_Land      = 3481   # Số cột
+NRows_Land      = 3891   # Số hàng
+XLLCorner_Land  = 108.354919
+YLLCorner_Land  = 32.674500
+CellSize_Land   = 0.000125	
 
-#### ✅ Related papers:
+NoData_value    = -9999
+```
 
-Chen G, Zhang K, Wang S, et al. iHydroSlide3D v1. 0: an advanced hydrological–geotechnical model for hydrological simulation and three-dimensional landslide prediction[J]. Geoscientific Model Development, 2023, 16(10): 2915-2937.
+#### 2. Hệ tọa độ
 
-Chen G, Zhang K, Wang S, et al. A prototype adaptive mesh generator for enhancing computational efficiency and accuracy in physically-based modeling of flood-landslide hazards[J]. Environmental Modelling & Software, 2025, 189: 106458.
+```python
+# GCS: Hệ tọa độ địa lý
+# PCS: Hệ tọa độ chiếu
+CoordinateSystem = GCS 
+```
 
-Chen G, Zhang K, Li Y, et al. Empowering a coupled hydrological-geotechnical model to simulate long-term vegetation dynamics and their impact on catchment-scale flood and landslide hazards[J]. Journal of Hydrology, 2025, 658: 133225.
+#### 3. Thông tin thời gian mô phỏng
 
-Chen G, Zhang K, Wang S, et al. A prototype adaptive mesh generator for enhancing computational efficiency and accuracy in physically-based modeling of flood-landslide hazards[J]. Environmental Modelling & Software, 2025, 189: 106458.
+```python
+TimeMark    = h              # y(năm);m(tháng);d(ngày);h(giờ);u(phút);s(giây)
+TimeStep    = 1
+StartDate   = 2012062700   
+LoadState   = no             # Chuyển "yes" để khởi động ấm
+WarmupDate  = 2012070201     # Ngày bắt đầu khởi động ấm
+EndDate     = 2012062704  
+SaveState   = no             # Lưu biến trung gian cho khởi động ấm tiếp theo
+```
 
-Zhang, K., Xue, X., Hong, Y., Gourley, J. J., Lu, N., Wan, Z., Hong, Z., and Wooten, R.: iCRESTRIGRS: A coupled modeling system for cascading Flood–Landslide disaster forecasting, Hydrology and Earth System Sciences, 20, 5035–5048, 10.5194/hess-20-5035-2016, 2016.
+#### 4. Kiểu chạy mô hình
 
-Wang, S., Zhang, K., van Beek, L. P. H., Tian, X., and Bogaard, T. A.: Physically-based landslide prediction over a large region: Scaling low-resolution hydrological model results for high-resolution slope stability assessment, Environmental Modelling & Software, 124, 104607, 10.1016/j.envsoft.2019.104607, 2020.
+```python
+RunStyle    = simu           # simu, cali_SCEUA
+ModelCore   = HydroSlide3D   # Hydro (chỉ thủy văn), HydroSlide3D
+RoutingType = CLR            # JLR (mặc định), CLR
+```
+Nếu chỉ chạy Hydro thì chỉ cần chuẩn bị data trong Hydrobasic và Param (ICS nếu có data)
 
-Mergili, M., Marchesini, I., Alvioli, M., Metz, M., Schneider-Muntau, B., Rossi, M., and Guzzetti, F.: A strategy for GIS-Based 3-D slope stability modelling over large areas, Geoscientific Model Development, 7, 2969–2982, 10.5194/gmd-7-2969-2014, 2014a. 		
+### Chạy iHydroSlide3D
+
+```bash
+./iHydroSlide3D
+```
+
+---
+
+## Các tham số mô hình (đừng sửa thông số nếu không chắc chắn)
+
+| Tham số       | Mô tả                                           | Đơn vị          | Phạm vi     |
+| :------------ | :---------------------------------------------- | --------------- | ----------- |
+| $K_{sat}$     | Hệ số thấm bão hòa của đất                      | mm/h            | /           |
+| $WM$          | Dung lượng chứa nước của đất                    | mm              | /           |
+| $B$           | Số mũ của đường cong thấm biến đổi              | -               | [0.05, 1.5] |
+| $IM$          | Tỷ lệ diện tích không thấm                      | -               | /           |
+| $coeM$        | Hệ số vận tốc dòng chảy mặt                     | -               | [1, 150]    |
+| $expM$        | Số mũ tốc độ dòng chảy mặt                      | -               | [0.1, 0.55] |
+| $coeR$        | Tỷ lệ tốc độ dòng kênh/mặt                      | -               | [1, 3]      |
+| $coeS$        | Tỷ lệ tốc độ dòng ngầm/mặt                      | -               | [0.01, 1]   |
+| $c_s$         | Lực dính của đất                                | kPa             | /           |
+| $\gamma_{s}$  | Trọng lượng riêng đất khô                       | kN/m³           | /           |
+| $\varphi$     | Góc ma sát trong                                | °               | /           |
+
+---
+
+## Kết quả đầu ra
+
+Chuyển sang "yes" trong `Control.Project` để xác nhận đầu ra:
+
+- **GOVar_Rain**: Lượng mưa đầu vào (mm/h)
+- **GOVar_SM**: Độ ẩm đất (%)
+- **GOVar_R**: Lưu lượng mô phỏng của từng ô lưới (m³/s)
+- **GOVar_FS3D**: Hệ số an toàn theo mô hình 3D
+- **GOVar_PF**: Xác suất xảy ra sạt lở
+- **GOVar_FVolume**: Thể tích sạt lở (m³)
+- **GOVar_FArea**: Diện tích bề mặt sạt lở (m²)
+
+---
+
+## Trực quan hóa
+
+Vào thư mục "Visualization" và chạy:
+
+```bash
+python Plot_all.py
+```
+
+nếu muốn xuất output ra dạng tif thì chạy 
+
+```bash
+python ExportTIF.py
+```
+
+---
+
+## Liên hệ
+
+Tham khảo để biết thêm chi tiết
+Guoding Chen: [guoding.chen94@gmail.com](mailto:guoding.chen94@gmail.com)
+https://gmd.copernicus.org/articles/16/2915/2023/
+https://github.com/GuodingChen/iHydroSlide3D
+
+
+ 		
 
 
 
