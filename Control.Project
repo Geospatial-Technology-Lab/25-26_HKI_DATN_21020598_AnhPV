@@ -1,0 +1,127 @@
+##########################################################################
+# PHyL Control file for simulating information
+##########################################################################
+Version		=	1.0
+##########################################################################
+# MODEL AREA 
+##########################################################################
+# Hydrological map
+NCols_Hydro		=	653	# Number of columns
+NRows_Hydro		=	607	# Number of rows
+XLLCorner_Hydro		=	103.7045833
+YLLCorner_Hydro		=	22.118750033333
+CellSize_Hydro		=	0.00083333333333334
+# Landslide map	
+NCols_Land		=	1959	# Number of columns
+NRows_Land		=	1821	# Number of rows
+XLLCorner_Land		=	103.70430554444
+YLLCorner_Land		=	22.118750011111
+CellSize_Land		=	0.00027777777777778
+# define the invalid value
+NoData_value	=	-9999
+##########################################################################
+# Model map Coordinate System
+# Geographic Coordinate System: GCS
+# Projected Coordinate System: PCS
+CoordinateSystem = GCS
+##########################################################################
+# MODEL Run Time Information
+# y(year);m(month);d(day);h(hour);u(minute);s(second)
+##########################################################################
+TimeMark		=	h
+TimeStep		=	1
+StartDate		= 	2024090500   # 2012070208
+LoadState		=	no
+WarmupDate		=	2024090100
+EndDate			= 	2024091100  # 2012070920
+SaveState		=	no
+##########################################################################
+# MODEL Run Style
+##########################################################################
+RunStyle = simu	# simu, cali_SCEUA, RealTime, repe
+ModelCore = HydroSlide3D    # Hydro, HydroSlide3D
+##########################################################################
+# Routing scheme
+RoutingType =CLR		# JLR (default), CLR
+##########################################################################
+HydroBasicFormat	=	asc 
+HydroBasicPath	=	"./HydroBasics/"
+##########################################################################
+SoilDownscaleFormat	=	asc 
+SoilDownscalePath	=	"./DownscalingBasicData/"
+##########################################################################
+LandslideFormat	=	asc 
+LandslidePath	=	"./LandslideBasics/"
+##########################################################################
+ParamFormat	=	asc
+ParamPath	=	"./Params/"
+##########################################################################
+StateFormat	=	asc
+StatePath	=	"./States/"
+##########################################################################
+ICSFormat	=	asc
+ICSPath		=	"./ICS/"
+##########################################################################
+RainFormat	=	asc
+RainPath	=	"./Rains/rain"
+##########################################################################
+PETFormat	=	asc
+PETPath		=	"./PETs/pet"
+##########################################################################
+ResultFormat	=	hdf5  # asc, hdf5
+ResultPath	=	"./Results/"
+##########################################################################
+CalibFormat	=	asc
+CalibPath	=	"./Calibs/"
+##########################################################################
+OBSFormat	=	txt
+OBSPath		=	"./OBS/"
+##########################################################################
+# The below data are omitted, when RunStyle=cali_SCEUA
+##########################################################################
+#OutPix Information
+##########################################################################
+NOutPixs		=	 0
+OutPixColRow 	=	no
+OutPixName1 	=	Laocai
+OutPixLong1	    =	104.18249996666685
+OutPixLati1		=	22.40916670000024
+OutPixCol1		=	127
+OutPixRow1 	    = 	234
+##########################################################################
+#Outlet Information
+##########################################################################
+HasOutlet		=	yes
+OutletColRow	=	no
+OutletName		=	Laocai
+OutletLong		=	104.16833330000026
+OutletLati		=	22.336666700000137
+OutletCol		=	573
+OutletRow		=	258
+#Grid Outputs
+##########################################################################
+GOVar_Rain		=	no
+GOVar_PET		=	no
+GOVar_EPot		=	no
+GOVar_EAct		=	no
+GOVar_W		= yes
+GOVar_SM		=	yes
+GOVar_R		=	yes
+GOVar_ExcS		=	no
+GOVar_ExcI		=	no
+GOVar_RS		=	no
+GOVar_RI		=	no
+GOVar_FS3D		=	yes
+GOVar_PF		=	yes
+GOVar_FVolume		=	yes
+GOVar_FArea		=	yes
+##########################################################################
+NumOfOutputDates	=	0      # 6
+OutputDate_1 = 2012070400
+OutputDate_2 = 2012070403
+OutputDate_3 = 2012070406
+OutputDate_4 = 2012070412
+OutputDate_5 = 2012070500
+OutputDate_6 = 2012070600
+
+##########################################################################
